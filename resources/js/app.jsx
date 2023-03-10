@@ -4,7 +4,7 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-import './bootstrap';
+import "./bootstrap";
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -12,4 +12,16 @@ import './bootstrap';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import './components/Example';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Main from "./components/Main.jsx";
+
+if (document.getElementById("root")) {
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+
+    root.render(
+        <React.StrictMode>
+            <Main />
+        </React.StrictMode>
+    );
+}
