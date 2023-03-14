@@ -6,12 +6,11 @@
   <title>Laravel</title>
 </head>
 <body>
-    <!-- React root DOM -->
-    <div id="root"></div>
+  <!-- React root DOM -->
+  <div id="root"></div>
 
-    <!-- React JS -->
-    @viteReactRefresh
-    @vite('resources/js/app.jsx')
-    
+  <!-- React JS -->
+  @viteReactRefresh
+  @vite('resources/js/app.jsx')
 </body>
 </html>
