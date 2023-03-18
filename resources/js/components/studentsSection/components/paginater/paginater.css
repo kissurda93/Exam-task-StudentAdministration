@@ -1,0 +1,24 @@
+.paginater-container {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.paginater-container div {
+  background-color: var(--color5);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.paginater-container a {
+  color: white;
+  pointer-events: none;
+}
+
+.paginater-container .active {
+  color: var(--color1);
+}

@@ -1,0 +1,18 @@
+.new-button {
+  background-color: var(--color2);
+  color: white;
+  border: none;
+  border-radius: 2px;
+  padding: 0.4rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.new-button::before {
+  content: "\f044";
+  font: var(--fa-font-regular);
+  margin-right: 0.6rem;
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}

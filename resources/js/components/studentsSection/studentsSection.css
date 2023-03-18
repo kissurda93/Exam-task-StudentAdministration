@@ -1,0 +1,64 @@
+.students-section-header,
+.students-section-body {
+  display: flex;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.students-section-header {
+  justify-content: space-between;
+  align-items: end;
+}
+
+.students-section-header .new-student-container {
+  display: flex;
+  align-items: center;
+  margin-right: 18rem;
+  gap: 2rem;
+}
+
+.students-section-header .students-count {
+  font-weight: 600;
+}
+
+.students-section-header .students-count::before {
+  content: "\f007";
+  font: var(--fa-font-regular);
+  margin-right: 0.3rem;
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.students-section-body {
+  border-top: 1px solid var(--color5);
+  padding-top: 1rem;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th {
+  font-weight: 400;
+  color: var(--color5);
+  padding-bottom: 1rem;
+  text-align: start;
+}
+
+.students-table td {
+  padding-block: 0.5rem;
+}
+
+.students-table tr {
+  border-bottom: 1px solid var(--color5);
+}
+
+.students-table .align-right {
+  text-align: end;
+}
+
+.students-section-filters {
+  width: 350px;
+}

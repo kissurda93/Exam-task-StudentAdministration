@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('place_of_birth');
             $table->date('date_of_birth');
             $table->string('email')->unique();
+            $table->string('photo');
             $table->timestamps();
         });
     }

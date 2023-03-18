@@ -39,6 +39,7 @@ class StudentAndStudySeeder extends Seeder
                 'place_of_birth' => fake()->city(),
                 'date_of_birth' => fake()->dateTime(),
                 'email' => fake()->unique()->safeEmail(),
+                'photo' => config('app.url') . '/img/useravatar.png',
             ]);
 
             $randomStudyCount = rand(1, 4);

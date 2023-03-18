@@ -14,14 +14,19 @@ import "./bootstrap";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Main from "./components/Main.jsx";
+import "../css/app.css";
+import Layout from "./components/layout/Layout";
+import store from "./store/store";
+import { Provider } from "react-redux";
 
 if (document.getElementById("root")) {
-    const root = ReactDOM.createRoot(document.getElementById("root"));
+  const root = ReactDOM.createRoot(document.getElementById("root"));
 
-    root.render(
-        <React.StrictMode>
-            <Main />
-        </React.StrictMode>
-    );
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <Layout />
+      </Provider>
+    </React.StrictMode>
+  );
 }

@@ -15,7 +15,8 @@ class Student extends Model
         'sex',
         'place_of_birth',
         'date_of_birth',
-        'email_address',
+        'email',
+        'photo',
     ];
 
     public function studygroups() {

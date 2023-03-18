@@ -1,0 +1,80 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-inline: 12rem;
+  margin-top: 2rem;
+}
+
+.main-title > h1 {
+  font-size: 3rem;
+  color: var(--color1);
+}
+
+.main-title > p {
+  color: rgb(179, 185, 189);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info > img {
+  border-radius: 50%;
+}
+
+.user-info > p {
+  font-weight: 600;
+}
+
+main {
+  margin-inline: 12rem;
+}
+
+.switching-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.switching-tabs > div {
+  width: 400px;
+  padding: 3rem 2rem;
+  background-color: var(--color4);
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.switching-tabs > div > h3 {
+  color: var(--color5);
+}
+
+.switching-tabs > div > p {
+  font-size: 0.9rem;
+  color: var(--color5);
+}
+
+.switching-tabs > .active-tab {
+  background-color: white;
+}
+
+.switching-tabs > .active-tab p {
+  color: black;
+}
+
+.switching-tabs > .active-tab > h3 {
+  color: var(--color2);
+}
+
+.section-container {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0 8px 8px 8px;
+  margin-bottom: 6rem;
+}
