@@ -17,16 +17,31 @@ export default function StudentsSection() {
       studyGroups.forEach((study) => {
         studies.push(study.name[0].toUpperCase() + study.name.substring(1));
       });
+
       return studies.join(", ");
     } else {
-      const rest = studyGroups.length - 2;
       for (let i = 0; i < 2; i++) {
         studies.push(
           studyGroups[i].name[0].toUpperCase() +
             studyGroups[i].name.substring(1)
         );
       }
-      return studies.join(", ") + ` and ${rest} more`;
+
+      const restStudies = studyGroups.slice(2);
+
+      const restStudiesNames = restStudies.map(
+        (study) => study.name[0].toUpperCase() + study.name.substring(1)
+      );
+
+      return (
+        <>
+          {studies.join(", ") + " and "}
+          <span className="rest-span">
+            {`${restStudies.length} more`}
+            <span className="tooltip">{restStudiesNames.join(", ")}</span>
+          </span>
+        </>
+      );
     }
   };
 

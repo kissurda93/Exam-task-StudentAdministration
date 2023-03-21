@@ -68,3 +68,25 @@
   font-size: 1.2rem;
   color: var(--color5);
 }
+
+.rest-span {
+  color: var(--color1);
+  cursor: default;
+  position: relative;
+}
+
+.rest-span .tooltip {
+  position: absolute;
+  z-index: 1;
+  visibility: hidden;
+  top: 100%;
+  left: 0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: var(--color1);
+  color: var(--color3);
+}
+
+.rest-span:hover .tooltip {
+  visibility: visible;
+}

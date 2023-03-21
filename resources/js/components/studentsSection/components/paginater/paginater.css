@@ -1,12 +1,19 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
 .paginater-container {
   display: flex;
   gap: 0.1rem;
+  margin-top: 0.2rem;
 }
 
 .paginater-container div {
   background-color: var(--color5);
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,4 +28,14 @@
 
 .paginater-container .active {
   color: var(--color1);
+}
+
+.page-container .total-page {
+  color: var(--color5);
+  font-size: 0.8rem;
+}
+
+.page-container .total-page-number {
+  color: var(--color1);
+  font-weight: 600;
 }

@@ -18,7 +18,7 @@ class StudentAndStudySeeder extends Seeder
         $genders = ['male', 'female'];
 
         $groups = [];
-        for ($i=0; $i <= 4 ; $i++) { 
+        for ($i = 0; $i <= 4 ; $i++) { 
             $study = StudyGroup::create([
                 'name' => $studies[$i],
                 'leader' => fake()->name(),
@@ -28,7 +28,7 @@ class StudentAndStudySeeder extends Seeder
             array_push($groups, $study);
         }
 
-        for ($i=0; $i< 50; $i++) {
+        for ($i = 0; $i < 125; $i++) {
             $randomGender = $genders[rand(0, 1)];
 
             $student = Student::create([
@@ -44,7 +44,7 @@ class StudentAndStudySeeder extends Seeder
 
             $randomStudyCount = rand(1, 4);
             $randomStudiesArray = [];
-            for ($j=1; $j <= $randomStudyCount; $j++) { 
+            for ($j = 1; $j <= $randomStudyCount; $j++) { 
                 $randomGroup = $groups[rand(0, 4)];
                 if(!in_array($randomGroup, $randomStudiesArray)){
                     array_push($randomStudiesArray, $randomGroup);
