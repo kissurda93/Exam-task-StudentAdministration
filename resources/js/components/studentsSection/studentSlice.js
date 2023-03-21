@@ -4,8 +4,10 @@ import { fetchStudents } from "./fetchStudents";
 const initialState = {
   students: [],
   students_count: 0,
+  filtered_students: 0,
   page_links: [],
   target_link: "http://localhost:8000/students",
+  searchByNameState: "",
   status: "idle",
   error: null,
 };
@@ -17,6 +19,9 @@ export const studentSlice = createSlice({
     setLink: (state, action) => {
       state.target_link = action.payload;
     },
+    setSearchByName: (state, action) => {
+      state.searchByNameState = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -24,11 +29,16 @@ export const studentSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
-        state.page_links = action.payload.paginated.links.slice(
-          1,
-          action.payload.paginated.links.length - 1
-        );
-        state.students = action.payload.paginated.data;
+        state.page_links = action.payload.students.links
+          ? action.payload.students.links.slice(
+              1,
+              action.payload.students.links.length - 1
+            )
+          : [];
+        state.students = action.payload.students.data
+          ? action.payload.students.data
+          : action.payload.students;
+        state.filtered_students = action.payload.students.total;
         state.students_count = action.payload.count;
         state.status = "succeeded";
       })
@@ -39,6 +49,6 @@ export const studentSlice = createSlice({
   },
 });
 
-export const { setLink } = studentSlice.actions;
+export const { setLink, setSearchByName } = studentSlice.actions;
 
 export default studentSlice.reducer;

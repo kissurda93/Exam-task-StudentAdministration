@@ -7,7 +7,7 @@ import Paginater from "./components/paginater/Paginater";
 import NewStudent from "./components/newStudent/NewStudent";
 
 export default function StudentsSection() {
-  const { students, status, students_count } = useSelector(
+  const { students, status, filtered_students } = useSelector(
     (state) => state.studentsSlice
   );
 
@@ -32,58 +32,63 @@ export default function StudentsSection() {
 
   return (
     <section className="students-section">
-      {status !== "succeeded" ? (
-        <Spinner />
-      ) : (
-        <>
-          <div className="students-section-header">
-            <StudentSearchForm />
-            <div className="new-student-container">
-              <p className="students-count">{students_count + " STUDENTS"}</p>
-              <NewStudent />
-            </div>
-            <Paginater />
-          </div>
-          <div className="students-section-body">
-            <div className="students-section-filters">
-              <FilterForm />
-            </div>
-            <table className="students-table">
-              <tbody>
-                <tr>
-                  <th></th>
-                  <th>NAME</th>
-                  <th>SEX</th>
-                  <th>PLACE AND DATE OF BIRTH</th>
-                  <th className="align-right">GROUPS</th>
-                </tr>
-                {students.length !== 0 &&
-                  students.map((student) => {
-                    return (
-                      <tr key={student.id}>
-                        <td>
-                          <img
-                            src={student.photo}
-                            alt="Student photo"
-                            title={student.name}
-                            height="40"
-                            width="40"
-                          />
-                        </td>
-                        <td>{student.name}</td>
-                        <td>{student.sex}</td>
-                        <td>{`${student.place_of_birth}, ${student.date_of_birth}`}</td>
-                        <td className="align-right">
-                          {collectStudyGroupsToTable(student.studygroups)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+      <div className="students-section-header">
+        <div className="new-student-container">
+          <StudentSearchForm />
+          {filtered_students !== 0 ? (
+            <p className="students-count">{filtered_students + " STUDENTS"}</p>
+          ) : (
+            <p className="students-count">{"0 STUDENTS"}</p>
+          )}
+          <NewStudent />
+        </div>
+        <Paginater />
+      </div>
+      <div className="students-section-body">
+        <div className="students-section-filters">
+          <FilterForm />
+        </div>
+        {status !== "succeeded" ? (
+          <Spinner />
+        ) : students.length !== 0 ? (
+          <table className="students-table">
+            <tbody>
+              <tr>
+                <th></th>
+                <th>NAME</th>
+                <th>SEX</th>
+                <th>PLACE AND DATE OF BIRTH</th>
+                <th className="align-right">GROUPS</th>
+              </tr>
+              {students.length !== 0 &&
+                students.map((student) => {
+                  return (
+                    <tr key={student.id}>
+                      <td>
+                        <img
+                          className="student-photo"
+                          src={student.photo}
+                          alt="Student photo"
+                          title={student.name}
+                          height="40"
+                          width="40"
+                        />
+                      </td>
+                      <td>{student.name}</td>
+                      <td>{student.sex}</td>
+                      <td>{`${student.place_of_birth}, ${student.date_of_birth}`}</td>
+                      <td className="align-right">
+                        {collectStudyGroupsToTable(student.studygroups)}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        ) : (
+          <p className="not-found">No student found!</p>
+        )}
+      </div>
     </section>
   );
 }

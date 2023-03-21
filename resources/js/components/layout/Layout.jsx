@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./layout.css";
 import StudentsSection from "../studentsSection/StudentsSection";
 import StudyGroupsSection from "../studyGroupsSection/StudyGroupsSection";
+import { fetchStudyGroups } from "../studyGroupsSection/fetchStudyGroups";
 import { fetchStudents } from "../studentsSection/fetchStudents";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,11 +17,11 @@ export default function Layout() {
     students: true,
     studyGroups: false,
   });
-  const fetchStudentsLink = useSelector(
-    (state) => state.studentsSlice.target_link
+  const { students_count, target_link } = useSelector(
+    (state) => state.studentsSlice
   );
-  const studentsCount = useSelector(
-    (state) => state.studentsSlice.students_count
+  const studyGroupsCount = useSelector(
+    (state) => state.studyGroupSlice.studyGroups_count
   );
 
   const handleSectionChange = (e) => {
@@ -35,8 +36,12 @@ export default function Layout() {
   };
 
   useEffect(() => {
-    dispatch(fetchStudents(fetchStudentsLink));
-  }, [fetchStudentsLink]);
+    dispatch(fetchStudents(target_link));
+  }, [target_link]);
+
+  useEffect(() => {
+    dispatch(fetchStudyGroups());
+  }, []);
 
   return (
     <>
@@ -63,7 +68,9 @@ export default function Layout() {
             onClick={handleSectionChange}
           >
             <h3>STUDENTS</h3>
-            {studentsCount && <p>{studentsCount + " student registered"}</p>}
+            {students_count !== 0 && (
+              <p>{students_count + " student registered"}</p>
+            )}
           </div>
           <div
             className={showSection.studyGroups ? "active-tab" : ""}
@@ -71,7 +78,14 @@ export default function Layout() {
             onClick={handleSectionChange}
           >
             <h3>STUDY GROUPS</h3>
-            <p>6 study groups with 0 students</p>
+            {studyGroupsCount !== 0 && (
+              <p>
+                {studyGroupsCount +
+                  " study groups with " +
+                  students_count +
+                  " students"}
+              </p>
+            )}
           </div>
         </div>
         <div className="section-container">

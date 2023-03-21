@@ -12,13 +12,13 @@
 
 .students-section-header .new-student-container {
   display: flex;
-  align-items: center;
-  margin-right: 18rem;
+  align-items: end;
   gap: 2rem;
 }
 
 .students-section-header .students-count {
   font-weight: 600;
+  margin-left: 3rem;
 }
 
 .students-section-header .students-count::before {
@@ -59,6 +59,12 @@
   text-align: end;
 }
 
-.students-section-filters {
-  width: 350px;
+.student-photo {
+  border-radius: 50%;
+}
+
+.not-found {
+  margin: 5rem auto;
+  font-size: 1.2rem;
+  color: var(--color5);
 }
