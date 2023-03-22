@@ -1,6 +1,7 @@
 import "./studentSearchForm.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setLink, setSearchByName } from "../../studentSlice";
+import { concatLink } from "../../../../helpers/helpers";
 
 let TIME_OUT = null;
 
@@ -20,13 +21,13 @@ export default function StudentSearchForm() {
 
     dispatch(setSearchByName(e.target.value));
 
-    const { biology, math, history, grammar, programming } = checkboxStates;
-    const link =
-      e.target.value !== ""
-        ? `/students?biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}&name=${e.target.value}`
-        : `/students?biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}`;
-
-    TIME_OUT = setTimeout(() => dispatch(setLink(link)), 800);
+    TIME_OUT = setTimeout(
+      () =>
+        dispatch(
+          setLink(concatLink("/students?", checkboxStates, e.target.value))
+        ),
+      800
+    );
   };
 
   return (

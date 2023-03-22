@@ -20,5 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('/students', [StudentController::class, 'getStudents']);
+Route::post('/newStudent', [StudentController::class, 'newStudent']);
 
 Route::get('/studyGroups', [StudyGroupController::class, 'getStudyGroups']);

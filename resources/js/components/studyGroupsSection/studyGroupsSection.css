@@ -1,0 +1,20 @@
+.study-groups-section {
+  padding: 3rem;
+}
+
+.study-group-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.study-group-table th {
+  text-align: start;
+  font-weight: 400;
+  color: var(--color5);
+}
+
+.study-group-table th,
+.study-group-table td {
+  border-bottom: 1px solid var(--color5);
+  padding-block: 1rem;
+}

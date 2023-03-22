@@ -6,7 +6,9 @@ const initialState = {
   students_count: 0,
   filtered_students: 0,
   page_links: [],
-  last_page: 0,
+  total_page: 0,
+  first_page: "",
+  last_page: "",
   target_link: "http://localhost:8000/students",
   searchByNameState: "",
   status: "idle",
@@ -74,7 +76,9 @@ export const studentSlice = createSlice({
         state.filtered_students = action.payload.students.total;
         state.students_count = action.payload.count;
         state.status = "succeeded";
-        state.last_page = action.payload.students.last_page;
+        state.total_page = action.payload.students.last_page;
+        state.first_page = action.payload.students.first_page_url;
+        state.last_page = action.payload.students.last_page_url;
       })
       .addCase(fetchStudents.rejected, (state, action) => {
         state.status = "failed";

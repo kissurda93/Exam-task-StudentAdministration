@@ -84,9 +84,13 @@
   padding: 0.5rem;
   border-radius: 4px;
   background-color: var(--color1);
-  color: var(--color3);
+  color: white;
 }
 
 .rest-span:hover .tooltip {
   visibility: visible;
+}
+
+.no-group {
+  color: red;
 }

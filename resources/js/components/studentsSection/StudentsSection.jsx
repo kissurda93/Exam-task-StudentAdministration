@@ -11,7 +11,7 @@ export default function StudentsSection() {
     (state) => state.studentsSlice
   );
 
-  const collectStudyGroupsToTable = (studyGroups) => {
+  const collectStudyGroupsToStudentTable = (studyGroups) => {
     let studies = [];
     if (studyGroups.length < 3) {
       studyGroups.forEach((study) => {
@@ -75,29 +75,32 @@ export default function StudentsSection() {
                 <th>PLACE AND DATE OF BIRTH</th>
                 <th className="align-right">GROUPS</th>
               </tr>
-              {students.length !== 0 &&
-                students.map((student) => {
-                  return (
-                    <tr key={student.id}>
-                      <td>
-                        <img
-                          className="student-photo"
-                          src={student.photo}
-                          alt="Student photo"
-                          title={student.name}
-                          height="40"
-                          width="40"
-                        />
-                      </td>
-                      <td>{student.name}</td>
-                      <td>{student.sex}</td>
-                      <td>{`${student.place_of_birth}, ${student.date_of_birth}`}</td>
-                      <td className="align-right">
-                        {collectStudyGroupsToTable(student.studygroups)}
-                      </td>
-                    </tr>
-                  );
-                })}
+              {students.map((student) => {
+                return (
+                  <tr key={student.id}>
+                    <td>
+                      <img
+                        className="student-photo"
+                        src={student.photo}
+                        alt="Student photo"
+                        title={student.name}
+                        height="40"
+                        width="40"
+                      />
+                    </td>
+                    <td>{student.name}</td>
+                    <td>{student.sex}</td>
+                    <td>{`${student.place_of_birth}, ${student.date_of_birth}`}</td>
+                    <td className="align-right">
+                      {student.studygroups.length === 0 ? (
+                        <p className="no-group">Not in group</p>
+                      ) : (
+                        collectStudyGroupsToStudentTable(student.studygroups)
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (

@@ -1,21 +1,17 @@
 import "./paginater.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setLink } from "../../studentSlice";
+import { concatLink } from "../../../../helpers/helpers";
 
 export default function Paginater() {
   const dispatch = useDispatch();
-  const links = useSelector((state) => state.studentsSlice.page_links);
-  const { biology, math, history, grammar, programming } = useSelector(
+  const checkboxStates = useSelector(
     (state) => state.studyGroupSlice.checkboxStates
   );
-  const totalPageCount = useSelector((state) => state.studentsSlice.last_page);
-  const nameValue = useSelector(
-    (state) => state.studentsSlice.searchByNameState
-  );
+  const { total_page, first_page, last_page, searchByNameState, page_links } =
+    useSelector((state) => state.studentsSlice);
   const dataLinkAddition =
-    nameValue === ""
-      ? `&biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}`
-      : `&biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}&name=${nameValue}`;
+    "&" + concatLink("", checkboxStates, searchByNameState);
 
   const handlePageChange = (e) => {
     dispatch(setLink(e.target.dataset.link));
@@ -29,6 +25,12 @@ export default function Paginater() {
       case "Next &raquo;":
         return <i className="fa-solid fa-angle-right"></i>;
 
+      case "first":
+        return <i className="fa-solid fa-angles-left"></i>;
+
+      case "last":
+        return <i className="fa-solid fa-angles-right"></i>;
+
       default:
         return label;
     }
@@ -38,11 +40,21 @@ export default function Paginater() {
     <div className="page-container">
       <p className="total-page">
         TOTAL PAGE NUMBER:{" "}
-        <span className="total-page-number">{totalPageCount}</span>
+        <span className="total-page-number">{total_page}</span>
       </p>
       <div className="paginater-container">
-        {links.length !== 0 &&
-          links.map((link) => {
+        {page_links.findIndex((link) => link.active === true) !== 1 && (
+          <div
+            data-link={first_page + dataLinkAddition}
+            onClick={handlePageChange}
+          >
+            <a href={first_page}>
+              <i class="fa-solid fa-angles-left"></i>
+            </a>
+          </div>
+        )}
+        {page_links.length !== 0 &&
+          page_links.map((link) => {
             if (link.url !== null) {
               return (
                 <div
@@ -60,6 +72,17 @@ export default function Paginater() {
               );
             }
           })}
+        {page_links.findIndex((link) => link.active === true) !==
+          page_links.length - 2 && (
+          <div
+            data-link={last_page + dataLinkAddition}
+            onClick={handlePageChange}
+          >
+            <a href={last_page}>
+              <i class="fa-solid fa-angles-right"></i>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Http\Requests\NewStudentRequest;
+use Illuminate\Validation\ValidationException;
 use App\Http\Requests\StudentsByFiltersRequest;
+use App\Models\StudyGroup;
 
 class StudentController extends Controller
 {
@@ -40,5 +43,44 @@ class StudentController extends Controller
         $students = Student::with('studygroups:name')->paginate(10);
 
         return response(compact('students', 'count'));
+    }
+
+    public function newStudent(NewStudentRequest $request) {
+        try {
+            $validated = $request->validated();
+        }
+        catch (ValidationException $e) {
+            return response($e->errors());
+        }
+
+        if(isset($validated['photo'])) {
+            $file = $validated['photo'];
+            $imageName = time() . '-' . $validated['name'] . "." . $file->extension();
+            $file->move(public_path('img'), $imageName);
+            $path = config('app.url') . '/img/' . $imageName;
+            $validated['photo'] = $path;
+        } else {
+            $validated['photo'] = config('app.url') . '/img/' . 'useravatar.png';
+        }
+
+        $student = Student::create($validated);
+
+        if(isset($validated['study_groups'])) {
+            $studyGroups = StudyGroup::get();
+            
+            $validated['study_groups'] = trim($validated['study_groups'], ",");
+            $studiesArray = explode(', ', $validated['study_groups']);
+
+            if(count($studiesArray) > 4)
+                return response(['message' => 'Study Group limit per students is 4!'], 422);
+
+            $studyGroups->each(function($group) use($studiesArray, $student) {
+                if(in_array($group['name'], $studiesArray)) {
+                    $student->studygroups()->attach($group);
+                }
+            });
+        }
+
+        return response($student);
     }
 }

@@ -2,6 +2,7 @@ import "./filterForm.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setCheckboxState } from "../../../studyGroupsSection/studyGroupSlice";
 import { setLink } from "../../studentSlice";
+import { concatLink } from "../../../../helpers/helpers";
 
 export default function FilterForm() {
   const dispatch = useDispatch();
@@ -21,16 +22,8 @@ export default function FilterForm() {
       ...checkboxStates,
       [e.target.name]: !prevValue,
     };
-    const { biology, math, history, grammar, programming } = newCheckboxStates;
 
-    let newLink;
-    if (nameValue !== "") {
-      newLink = `/students?biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}&name=${nameValue}`;
-    } else {
-      newLink = `/students?biology=${biology}&math=${math}&history=${history}&grammar=${grammar}&programming=${programming}`;
-    }
-
-    dispatch(setLink(newLink));
+    dispatch(setLink(concatLink("students?", newCheckboxStates, nameValue)));
   };
 
   return (

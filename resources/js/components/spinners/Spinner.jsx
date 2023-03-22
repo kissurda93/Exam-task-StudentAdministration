@@ -1,13 +1,13 @@
 import "./spinner.css";
 
-export default function Spinner({ white }) {
+export default function Spinner({ small }) {
   return (
     <div className="spinner-container">
-      <div className="lds-ring">
-        <div className={white ? "white-spinner" : ""}></div>
-        <div className={white ? "white-spinner" : ""}></div>
-        <div className={white ? "white-spinner" : ""}></div>
-        <div className={white ? "white-spinner" : ""}></div>
+      <div className={small ? "lds-ring small-spinner-container" : "lsd-ring"}>
+        <div className={small ? "small-spinner" : ""}></div>
+        <div className={small ? "small-spinner" : ""}></div>
+        <div className={small ? "small-spinner" : ""}></div>
+        <div className={small ? "small-spinner" : ""}></div>
       </div>
     </div>
   );

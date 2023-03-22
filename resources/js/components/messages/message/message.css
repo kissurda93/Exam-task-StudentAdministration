@@ -1,0 +1,25 @@
+.message-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.message-container p {
+  font-size: 1.3rem;
+  color: green;
+  background-color: rgb(148, 245, 148);
+  border: 1px solid green;
+  border-radius: 4px;
+  padding: 0.8rem 1.2rem;
+  margin-top: 2rem;
+  z-index: 5;
+}
+
+.error-message {
+  color: rgb(158, 2, 2) !important;
+  background-color: rgb(248, 158, 158) !important;
+  border-color: rgb(161, 3, 3) !important;
+}

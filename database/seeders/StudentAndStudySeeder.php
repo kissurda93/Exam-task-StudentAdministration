@@ -14,18 +14,18 @@ class StudentAndStudySeeder extends Seeder
      */
     public function run(): void
     {
-        $studies = ['biology', 'math', 'history', 'grammar', 'programming'];
+        $studies = ['biology', 'math', 'history', 'grammar', 'programming', 'art'];
         $genders = ['male', 'female'];
 
         $groups = [];
-        for ($i = 0; $i <= 4 ; $i++) { 
-            $study = StudyGroup::create([
-                'name' => $studies[$i],
+        foreach ($studies as $study) {
+            $studyInDb = StudyGroup::create([
+                'name' => $study,
                 'leader' => fake()->name(),
-                'subject' => $studies[$i],
+                'subject' => $study,
                 'date_and_time' => fake()->dateTime(),
             ]);
-            array_push($groups, $study);
+            array_push($groups, $studyInDb);
         }
 
         for ($i = 0; $i < 125; $i++) {
@@ -44,8 +44,9 @@ class StudentAndStudySeeder extends Seeder
 
             $randomStudyCount = rand(1, 4);
             $randomStudiesArray = [];
+            $groupsLength = count($groups);
             for ($j = 1; $j <= $randomStudyCount; $j++) { 
-                $randomGroup = $groups[rand(0, 4)];
+                $randomGroup = $groups[rand(0, $groupsLength - 1)];
                 if(!in_array($randomGroup, $randomStudiesArray)){
                     array_push($randomStudiesArray, $randomGroup);
                 }

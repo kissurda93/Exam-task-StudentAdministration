@@ -5,6 +5,8 @@ import StudyGroupsSection from "../studyGroupsSection/StudyGroupsSection";
 import { fetchStudyGroups } from "../studyGroupsSection/fetchStudyGroups";
 import { fetchStudents } from "../studentsSection/fetchStudents";
 import { useDispatch, useSelector } from "react-redux";
+import { resetMessage } from "../messages/message/messageSlice";
+import Message from "../messages/message/Message";
 
 const falseShowSections = {
   students: false,
@@ -23,6 +25,7 @@ export default function Layout() {
   const studyGroupsCount = useSelector(
     (state) => state.studyGroupSlice.studyGroups_count
   );
+  const message = useSelector((state) => state.messageSlice.message);
 
   const handleSectionChange = (e) => {
     if (e.target.dataset.link) {
@@ -34,6 +37,14 @@ export default function Layout() {
       });
     }
   };
+
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      dispatch(resetMessage());
+    }, 3000);
+
+    return () => clearTimeout(timeOut);
+  }, [message]);
 
   useEffect(() => {
     dispatch(fetchStudents(target_link));
@@ -58,6 +69,7 @@ export default function Layout() {
             height={50}
           />
           <p>User</p>
+          <Message />
         </div>
       </header>
       <main>
@@ -79,12 +91,7 @@ export default function Layout() {
           >
             <h3>STUDY GROUPS</h3>
             {studyGroupsCount !== 0 && (
-              <p>
-                {studyGroupsCount +
-                  " study groups with " +
-                  students_count +
-                  " students"}
-              </p>
+              <p>{studyGroupsCount + " study group"}</p>
             )}
           </div>
         </div>
