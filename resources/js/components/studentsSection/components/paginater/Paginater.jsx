@@ -8,32 +8,90 @@ export default function Paginater() {
   const checkboxStates = useSelector(
     (state) => state.studyGroupSlice.checkboxStates
   );
-  const { total_page, first_page, last_page, searchByNameState, page_links } =
-    useSelector((state) => state.studentsSlice);
+  const {
+    total_page,
+    prev_page,
+    next_page,
+    first_page,
+    last_page,
+    searchByNameState,
+    page_links,
+  } = useSelector((state) => state.studentsSlice);
+
   const dataLinkAddition =
     "&" + concatLink("", checkboxStates, searchByNameState);
 
-  const handlePageChange = (e) => {
-    dispatch(setLink(e.target.dataset.link));
-  };
+  const renderPaginateBtn = (btn) => {
+    switch (btn) {
+      case "prev":
+        if (page_links.findIndex((link) => link.active) !== 0) {
+          return (
+            <div
+              data-link={prev_page + dataLinkAddition}
+              onClick={handlePageChange}
+            >
+              <a href={prev_page}>
+                <i className="fa-solid fa-angle-left"></i>
+              </a>
+            </div>
+          );
+        }
+        break;
 
-  const handleLinkLabel = (label) => {
-    switch (label) {
-      case "&laquo; Previous":
-        return <i className="fa-solid fa-angle-left"></i>;
-
-      case "Next &raquo;":
-        return <i className="fa-solid fa-angle-right"></i>;
+      case "next":
+        if (
+          page_links.findIndex((link) => link.active) !==
+          page_links.length - 1
+        ) {
+          return (
+            <div
+              data-link={next_page + dataLinkAddition}
+              onClick={handlePageChange}
+            >
+              <a href={next_page}>
+                <i className="fa-solid fa-angle-right"></i>
+              </a>
+            </div>
+          );
+        }
+        break;
 
       case "first":
-        return <i className="fa-solid fa-angles-left"></i>;
+        if (!page_links.find((link) => link.url === first_page)) {
+          return (
+            <div
+              data-link={first_page + dataLinkAddition}
+              onClick={handlePageChange}
+            >
+              <a href={first_page}>
+                <i className="fa-solid fa-angles-left"></i>
+              </a>
+            </div>
+          );
+        }
+        break;
 
       case "last":
-        return <i className="fa-solid fa-angles-right"></i>;
+        if (!page_links.find((link) => link.url === last_page)) {
+          return (
+            <div
+              data-link={last_page + dataLinkAddition}
+              onClick={handlePageChange}
+            >
+              <a href={last_page}>
+                <i className="fa-solid fa-angles-right"></i>
+              </a>
+            </div>
+          );
+        }
 
       default:
-        return label;
+        break;
     }
+  };
+
+  const handlePageChange = (e) => {
+    dispatch(setLink(e.target.dataset.link));
   };
 
   return (
@@ -43,16 +101,8 @@ export default function Paginater() {
         <span className="total-page-number">{total_page}</span>
       </p>
       <div className="paginater-container">
-        {page_links.findIndex((link) => link.active === true) !== 1 && (
-          <div
-            data-link={first_page + dataLinkAddition}
-            onClick={handlePageChange}
-          >
-            <a href={first_page}>
-              <i class="fa-solid fa-angles-left"></i>
-            </a>
-          </div>
-        )}
+        {renderPaginateBtn("first")}
+        {renderPaginateBtn("prev")}
         {page_links.length !== 0 &&
           page_links.map((link) => {
             if (link.url !== null) {
@@ -66,23 +116,14 @@ export default function Paginater() {
                     href={link.url}
                     className={link.active === true ? "active" : ""}
                   >
-                    {handleLinkLabel(link.label)}
+                    {link.label}
                   </a>
                 </div>
               );
             }
           })}
-        {page_links.findIndex((link) => link.active === true) !==
-          page_links.length - 2 && (
-          <div
-            data-link={last_page + dataLinkAddition}
-            onClick={handlePageChange}
-          >
-            <a href={last_page}>
-              <i class="fa-solid fa-angles-right"></i>
-            </a>
-          </div>
-        )}
+        {renderPaginateBtn("next")}
+        {renderPaginateBtn("last")}
       </div>
     </div>
   );
