@@ -1,0 +1,148 @@
+.update-student-form {
+  background-color: var(--color4);
+  padding: 3rem;
+  border-radius: 4px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+  color: var(--color1);
+}
+
+.update-student-form h3 {
+  font-weight: 400;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.update-student-form .name-in-title {
+  font-weight: 600;
+}
+
+.update-student-form > div {
+  display: flex;
+}
+
+.update-student-form div:nth-child(3) {
+  justify-content: space-between;
+}
+
+.update-student-form .details {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.update-student-form .details > * {
+  margin-bottom: 0.5rem;
+}
+
+.update-student-form label {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-student-form input {
+  font-size: 1.1rem;
+  padding: 0.2rem 0.6rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color5);
+  color: white;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.update-student-form input:focus {
+  outline: 2px solid var(--color2);
+}
+
+.student-study-group-conatiner {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color5);
+  border-radius: 4px;
+  width: 300px;
+}
+
+.student-study-group-conatiner i {
+  font-size: 1.4rem;
+}
+
+.student-study-group-conatiner > div {
+  background-color: var(--color3);
+  padding: 0.3rem;
+  margin-bottom: 0.3rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.student-study-group-conatiner > select {
+  background-color: var(--color3);
+  padding: 0.3rem;
+  margin-bottom: 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color1);
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+}
+
+.student-study-group-conatiner .plus-icon {
+  position: relative;
+  pointer-events: none;
+}
+
+.student-study-group-conatiner .plus-icon::before {
+  position: absolute;
+  font: var(--fa-font-solid);
+  content: "\f0fe";
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.4rem;
+  left: -25px;
+  top: -1px;
+  pointer-events: none;
+}
+
+.student-study-group-conatiner h4 {
+  font-weight: 400;
+}
+
+.update-student-form .update-btn-conatiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: end;
+  gap: 0.8rem;
+}
+
+.update-student-form .update-btn-conatiner .save {
+  height: 47.8px;
+  width: 108.6px;
+  font-size: 1.1rem;
+  padding: 0.4rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color2);
+  color: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.update-student-form .update-btn-conatiner .delete {
+  height: 47.8px;
+
+  font-size: 1.1rem;
+  padding: 0.4rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(247, 111, 111);
+  color: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}

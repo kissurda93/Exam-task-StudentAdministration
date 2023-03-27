@@ -16,3 +16,15 @@ export const concatLink = (link, checkBoxStateObject, nameValue) => {
 
 export const upperCase = (string) =>
   string[0].toUpperCase() + string.substring(1);
+
+export const listingSelectedGroups = (groups, uppCase = false) => {
+  let text = "";
+  groups.forEach((group) => {
+    if (uppCase) {
+      text += `${upperCase(group)}, `;
+    } else {
+      text += `${group}, `;
+    }
+  });
+  return text;
+};

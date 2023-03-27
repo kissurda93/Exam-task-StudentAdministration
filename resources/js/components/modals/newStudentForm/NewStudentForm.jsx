@@ -5,7 +5,7 @@ import Spinner from "../../spinners/Spinner";
 import axios from "axios";
 import InputError from "../../messages/inputError/InputError";
 import { fetchStudents } from "../../studentsSection/fetchStudents";
-import { upperCase } from "../../../helpers/helpers";
+import { upperCase, listingSelectedGroups } from "../../../helpers/helpers";
 import { setMessage } from "../../messages/message/messageSlice";
 
 export default function NewStudentForm({ setModal }) {
@@ -17,18 +17,6 @@ export default function NewStudentForm({ setModal }) {
   const [inputErrors, setInputErrors] = useState({ errors: {} });
   const studyGroups = useSelector((state) => state.studyGroupSlice.studyGroups);
   const targetLink = useSelector((state) => state.studentsSlice.target_link);
-
-  const listingSelectedGroups = (groups, uppCase = false) => {
-    let text = "";
-    groups.forEach((group) => {
-      if (uppCase) {
-        text += `${upperCase(group)}, `;
-      } else {
-        text += `${group}, `;
-      }
-    });
-    return text;
-  };
 
   const handleChange = (e) => {
     const copyInputErrors = { ...inputErrors };

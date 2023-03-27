@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudyGroupController;
+use Database\Factories\StudentFactory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,5 +22,7 @@ Route::get('/', function () {
 
 Route::get('/students', [StudentController::class, 'getStudents']);
 Route::post('/newStudent', [StudentController::class, 'newStudent']);
+Route::patch('/updateStudent', [StudentController::class, 'updateStudent']);
+Route::delete('/deleteStudent', [StudentController::class, 'deleteStudent']);
 
 Route::get('/studyGroups', [StudyGroupController::class, 'getStudyGroups']);

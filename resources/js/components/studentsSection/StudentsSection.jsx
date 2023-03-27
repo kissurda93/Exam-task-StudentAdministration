@@ -1,15 +1,19 @@
 import "./studentsSection.css";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import StudentSearchForm from "./components/searchForm/StudentSearchForm";
 import FilterForm from "./components/filterForm/FilterForm";
 import Spinner from "../spinners/Spinner";
 import Paginater from "./components/paginater/Paginater";
 import NewStudent from "./components/newStudent/NewStudent";
+import UpdateStudentForm from "../modals/updateStudentForm/UpdateStudentForm";
 
 export default function StudentsSection() {
   const { students, status, filtered_students } = useSelector(
     (state) => state.studentsSlice
   );
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [studentID, setStudentID] = useState(null);
 
   const collectStudyGroupsToStudentTable = (studyGroups) => {
     let studies = [];
@@ -77,7 +81,13 @@ export default function StudentsSection() {
               </tr>
               {students.map((student) => {
                 return (
-                  <tr key={student.id}>
+                  <tr
+                    key={student.id}
+                    onClick={() => {
+                      setStudentID(student.id);
+                      setShowUpdateForm(true);
+                    }}
+                  >
                     <td>
                       <img
                         className="student-photo"
@@ -107,6 +117,9 @@ export default function StudentsSection() {
           <p className="not-found">No student found!</p>
         )}
       </div>
+      {showUpdateForm && (
+        <UpdateStudentForm id={studentID} setModal={setShowUpdateForm} />
+      )}
     </section>
   );
 }

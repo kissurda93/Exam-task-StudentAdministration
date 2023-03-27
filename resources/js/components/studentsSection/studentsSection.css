@@ -49,6 +49,7 @@
 
 .students-table td {
   padding-block: 0.5rem;
+  cursor: pointer;
 }
 
 .students-table tr {
@@ -71,7 +72,6 @@
 
 .rest-span {
   color: var(--color1);
-  cursor: default;
   position: relative;
 }
 

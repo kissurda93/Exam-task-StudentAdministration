@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\NewStudentRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\StudentsByFiltersRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use App\Models\StudyGroup;
 
 class StudentController extends Controller
@@ -83,4 +84,72 @@ class StudentController extends Controller
 
         return response($student);
     }
+
+    public function updateStudent(UpdateStudentRequest $request) {
+        try {
+            $validated = $request->validated();
+        }
+        catch (ValidationException $e) {
+            return response($e->errors());
+        }
+
+        $updateArray = [];
+
+        $student = Student::find($validated['id']);
+
+        if(isset($validated['name'])) {
+            $updateArray['name'] = $validated['name'];
+        }
+
+        if(isset($validated['email'])) {
+            $updateArray['email'] = $validated['email'];
+        }
+
+        if(isset($validated['photo'])) {
+            $file = $validated['photo'];
+            $imageName = time() . '-' . $student['name'] . "." . $file->extension();
+            $file->move(public_path('img'), $imageName);
+            $path = config('app.url') . '/img/' . $imageName;
+            $updateArray['photo'] = $path;
+        }
+
+        $student->update($updateArray);
+
+        if(isset($validated['study_groups'])) {
+            $studyGroups = StudyGroup::get();
+
+            $validated['study_groups'] = trim($validated['study_groups'], ",");
+            $studentGroupsInRequest = explode(', ', $validated['study_groups']);
+
+            $studentGroupsInDb = $student->studygroups()->get();
+
+            $studentGroupsInDb->each(function($group) use ($studentGroupsInRequest, $student) {
+                if(!in_array($group->name, $studentGroupsInRequest)) {
+                    $student->studygroups()->detach($group);
+                }
+            });
+
+            $transformedGroupsInDb = [];
+            $studentGroupsInDb->each(function($group) use (&$transformedGroupsInDb) {
+                array_push($transformedGroupsInDb, $group->name);
+            });
+
+            $diff = array_diff($studentGroupsInRequest, $transformedGroupsInDb);
+
+            if(count($diff) !== 0) {
+                $studyGroups->each(function($group) use ($diff, $student) {
+                    if(in_array($group->name, $diff)) {
+                        $student->studygroups()->attach($group);
+                    }
+                });
+            }
+            
+        }
+
+        $student = Student::with('studygroups')->find($validated['id']);
+        
+        return response($student);
+    }
+
+    public function deleteStudent() {}
 }
