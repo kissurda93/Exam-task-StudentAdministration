@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/students', [StudentController::class, 'getStudents']);
 Route::post('/newStudent', [StudentController::class, 'newStudent']);
-Route::patch('/updateStudent', [StudentController::class, 'updateStudent']);
-Route::delete('/deleteStudent', [StudentController::class, 'deleteStudent']);
+Route::patch('/updateStudent/{student}', [StudentController::class, 'updateStudent']);
+Route::delete('/deleteStudent/{student}', [StudentController::class, 'deleteStudent']);
 
 Route::get('/studyGroups', [StudyGroupController::class, 'getStudyGroups']);

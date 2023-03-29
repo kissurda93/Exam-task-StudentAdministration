@@ -3,50 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use Illuminate\Http\Request;
+use App\Services\StudentService;
 use App\Http\Requests\NewStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\StudentsByFiltersRequest;
-use App\Http\Requests\UpdateStudentRequest;
-use App\Models\StudyGroup;
+use App\Services\FiltersService;
 
 class StudentController extends Controller
 {
-    public function getStudents(StudentsByFiltersRequest $request) {
-        $request = $request->validated();
+    public function getStudents(StudentsByFiltersRequest $request, FiltersService $filter)
+    {
+        $validated = $request->validated();
+
         $count = Student::all()->count();
-
-        $filters = [];
-        foreach ($request as $filter => $value) {
-            if($value === "true" && $filter !== 'name')
-                array_push($filters, $filter);
-        }
-
-        if (isset($request['name']) && count($filters) !== 0) {
-            $students = Student::checkStudyGroups($filters)->where('name', 'LIKE', '%'.$request['name'].'%')->paginate(10);
-
-            return response(compact('students', 'count'));
-        }
-
-        if(isset($request['name'])) {
-            $students = Student::where('name', 'LIKE', '%'.$request['name'].'%')->with('studygroups:name')->paginate(10);
-            $count = Student::all()->count();
-
-            return response(compact('students', 'count'));
-        }
-
-        if(count($filters) !== 0) {
-            $students = Student::checkStudyGroups($filters)->paginate(10);
-            
-            return response(compact('students', 'count'));
-        }
-
-        $students = Student::with('studygroups:name')->paginate(10);
+        $students = $filter->filtering($validated);
 
         return response(compact('students', 'count'));
     }
 
-    public function newStudent(NewStudentRequest $request) {
+    public function newStudent(NewStudentRequest $request, StudentService $studentService)
+    {
         try {
             $validated = $request->validated();
         }
@@ -55,11 +32,7 @@ class StudentController extends Controller
         }
 
         if(isset($validated['photo'])) {
-            $file = $validated['photo'];
-            $imageName = time() . '-' . $validated['name'] . "." . $file->extension();
-            $file->move(public_path('img'), $imageName);
-            $path = config('app.url') . '/img/' . $imageName;
-            $validated['photo'] = $path;
+            $validated['photo'] = $studentService->savePhoto($validated['photo'], $validated['name']);
         } else {
             $validated['photo'] = config('app.url') . '/img/' . 'useravatar.png';
         }
@@ -67,25 +40,20 @@ class StudentController extends Controller
         $student = Student::create($validated);
 
         if(isset($validated['study_groups'])) {
-            $studyGroups = StudyGroup::get();
-            
-            $validated['study_groups'] = trim($validated['study_groups'], ",");
-            $studiesArray = explode(', ', $validated['study_groups']);
+            $studiesArray = $studentService->prepareStudyGroupsFromRequest($validated['study_groups']);
 
-            if(count($studiesArray) > 4)
-                return response(['message' => 'Study Group limit per students is 4!'], 422);
+            if(count($studiesArray) > 4) {
+                return response(['message' => 'A student can have a maximum of 4 groups!']);
+            }
 
-            $studyGroups->each(function($group) use($studiesArray, $student) {
-                if(in_array($group['name'], $studiesArray)) {
-                    $student->studygroups()->attach($group);
-                }
-            });
+            $studentService->addStudyGroups($studiesArray, $student);
         }
 
-        return response($student);
+        return response(['message' => "Added $student->name to database!"]);
     }
 
-    public function updateStudent(UpdateStudentRequest $request) {
+    public function updateStudent(UpdateStudentRequest $request, Student $student, StudentService $studentService )
+    {
         try {
             $validated = $request->validated();
         }
@@ -93,63 +61,27 @@ class StudentController extends Controller
             return response($e->errors());
         }
 
-        $updateArray = [];
-
-        $student = Student::find($validated['id']);
-
-        if(isset($validated['name'])) {
-            $updateArray['name'] = $validated['name'];
+        if(count($validated) === 0) {
+            return response(['message' => 'There is no data to update!']);
         }
 
-        if(isset($validated['email'])) {
-            $updateArray['email'] = $validated['email'];
+        list($updateArray, $studentGroupsInRequest) = $studentService->prepareToUpdate($validated, $student->name);
+
+        if(count($updateArray) !== 0) {
+            $student->update($updateArray);
         }
 
-        if(isset($validated['photo'])) {
-            $file = $validated['photo'];
-            $imageName = time() . '-' . $student['name'] . "." . $file->extension();
-            $file->move(public_path('img'), $imageName);
-            $path = config('app.url') . '/img/' . $imageName;
-            $updateArray['photo'] = $path;
+        if(count($studentGroupsInRequest) !== 0) {
+            $studentService->updateStudyGroups($student, $studentGroupsInRequest);
         }
-
-        $student->update($updateArray);
-
-        if(isset($validated['study_groups'])) {
-            $studyGroups = StudyGroup::get();
-
-            $validated['study_groups'] = trim($validated['study_groups'], ",");
-            $studentGroupsInRequest = explode(', ', $validated['study_groups']);
-
-            $studentGroupsInDb = $student->studygroups()->get();
-
-            $studentGroupsInDb->each(function($group) use ($studentGroupsInRequest, $student) {
-                if(!in_array($group->name, $studentGroupsInRequest)) {
-                    $student->studygroups()->detach($group);
-                }
-            });
-
-            $transformedGroupsInDb = [];
-            $studentGroupsInDb->each(function($group) use (&$transformedGroupsInDb) {
-                array_push($transformedGroupsInDb, $group->name);
-            });
-
-            $diff = array_diff($studentGroupsInRequest, $transformedGroupsInDb);
-
-            if(count($diff) !== 0) {
-                $studyGroups->each(function($group) use ($diff, $student) {
-                    if(in_array($group->name, $diff)) {
-                        $student->studygroups()->attach($group);
-                    }
-                });
-            }
-            
-        }
-
-        $student = Student::with('studygroups')->find($validated['id']);
         
-        return response($student);
+        return response(['message' => "Details of $student->name updated successfully!"]);
     }
 
-    public function deleteStudent() {}
+    public function deleteStudent(Student $student)
+    {
+        $student->delete();
+
+        return response(["message" => "$student->name deleted!"]);
+    }
 }

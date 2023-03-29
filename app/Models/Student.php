@@ -6,10 +6,11 @@ use App\Models\StudyGroup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -28,7 +29,7 @@ class Student extends Model
         foreach($filters as $filter){
             $query = $query->whereHas('studygroups', function (Builder $q) use ( $filter) {
                 $q->where('name', $filter);
-            })->with('studygroups:name');
+            });
         }
         return $query;
     }

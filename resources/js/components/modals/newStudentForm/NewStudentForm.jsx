@@ -69,7 +69,7 @@ export default function NewStudentForm({ setModal }) {
       const response = await axios.post("/newStudent", formData);
       if (response.status === 200) {
         setModal(false);
-        dispatch(setMessage("Student Added Successfully!"));
+        dispatch(setMessage(response.data.message));
         dispatch(fetchStudents(targetLink));
       }
     } catch (e) {

@@ -8,6 +8,7 @@ import { fetchStudents } from "../../studentsSection/fetchStudents";
 import { setMessage } from "../../messages/message/messageSlice";
 import { listingSelectedGroups } from "../../../helpers/helpers";
 import StudyGroupSelector from "./components/StudyGroupSelector";
+import DeleteStudent from "./components/DeleteStudent";
 
 export default function UpdateStudentForm({ id, setModal }) {
   const dispatch = useDispatch();
@@ -69,12 +70,11 @@ export default function UpdateStudentForm({ id, setModal }) {
       // The next line is a workaround for this problem.
       formData.append("_method", "PATCH");
 
-      const response = await axios.post("/updateStudent", formData);
-      console.log(response);
+      const response = await axios.post(`/updateStudent/${id}`, formData);
       if (response.status === 200) {
-        setModal(false);
-        dispatch(setMessage("Student Updated Successfully!"));
+        dispatch(setMessage(response.data.message));
         dispatch(fetchStudents(targetLink));
+        setModal(false);
       }
     } catch (e) {
       if (e.response.data.errors) {
@@ -158,9 +158,11 @@ export default function UpdateStudentForm({ id, setModal }) {
                 {loading ? <Spinner small={true} /> : "SAVE"}
               </button>
             )}
-            <button className="delete" disabled={loading}>
-              DELETE STUDENT
-            </button>
+            <DeleteStudent
+              name={student.name}
+              id={student.id}
+              setModal={setModal}
+            />
           </div>
         </div>
       </form>
