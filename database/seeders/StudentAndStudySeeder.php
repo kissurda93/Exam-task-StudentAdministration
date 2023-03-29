@@ -28,7 +28,7 @@ class StudentAndStudySeeder extends Seeder
             array_push($groups, $studyInDb);
         }
 
-        for ($i = 0; $i < 125; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             $randomGender = $genders[rand(0, 1)];
 
             $student = Student::create([

@@ -3,32 +3,43 @@
 namespace App\Services;
 
 use App\Models\StudyGroup;
+use Illuminate\Support\Str;
 
 class StudentService
 {
   public function prepareToUpdate($validated, $studentName)
   {
     $updateArray = [];
+    $updatedToEmail = [
+      'updatedName' => false,
+      'updatedEmail' => false,
+      'updatedPhoto' => false,
+      'updatedGroups' => false,
+    ];
 
     if(isset($validated['name'])) {
         $updateArray['name'] = $validated['name'];
+        $updatedToEmail['updatedName'] = $validated['name'];
     }
 
     if(isset($validated['email'])) {
         $updateArray['email'] = $validated['email'];
+        $updatedToEmail['updatedEmail'] = $validated['email'];
     }
 
     if(isset($validated['photo'])) {
         $updateArray['photo'] = $this->savePhoto($validated['photo'], $studentName);
+        $updatedToEmail['updatedPhoto'] = true;
     }
 
     if(isset($validated['study_groups'])) {
       $studentGroupsInRequest = $this->prepareStudyGroupsFromRequest($validated['study_groups']);
+      $updatedToEmail['updatedGroups'] = Str::upper($validated['study_groups']);
     } else {
       $studentGroupsInRequest = [];
     }
 
-    return [$updateArray, $studentGroupsInRequest];
+    return [$updateArray, $studentGroupsInRequest, $updatedToEmail];
   }
 
   public function updateStudyGroups($student, $studentGroupsInRequest)

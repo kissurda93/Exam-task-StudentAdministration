@@ -8,7 +8,10 @@ use App\Http\Requests\NewStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\StudentsByFiltersRequest;
+use App\Mail\StudentUpdatedEmail;
+use App\Mail\WelcomeEmail;
 use App\Services\FiltersService;
+use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
@@ -49,6 +52,8 @@ class StudentController extends Controller
             $studentService->addStudyGroups($studiesArray, $student);
         }
 
+        Mail::to($student->email)->send(new WelcomeEmail($student->name));
+
         return response(['message' => "Added $student->name to database!"]);
     }
 
@@ -65,7 +70,7 @@ class StudentController extends Controller
             return response(['message' => 'There is no data to update!']);
         }
 
-        list($updateArray, $studentGroupsInRequest) = $studentService->prepareToUpdate($validated, $student->name);
+        list($updateArray, $studentGroupsInRequest, $updatedToEmail) = $studentService->prepareToUpdate($validated, $student->name);
 
         if(count($updateArray) !== 0) {
             $student->update($updateArray);
@@ -74,6 +79,8 @@ class StudentController extends Controller
         if(count($studentGroupsInRequest) !== 0) {
             $studentService->updateStudyGroups($student, $studentGroupsInRequest);
         }
+
+        Mail::to($student->email)->send(new StudentUpdatedEmail($updatedToEmail, $student->name));
         
         return response(['message' => "Details of $student->name updated successfully!"]);
     }
