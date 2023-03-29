@@ -8,6 +8,7 @@ use App\Http\Requests\NewStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\StudentsByFiltersRequest;
+use App\Mail\StudentDeleted;
 use App\Mail\StudentUpdatedEmail;
 use App\Mail\WelcomeEmail;
 use App\Services\FiltersService;
@@ -88,6 +89,8 @@ class StudentController extends Controller
     public function deleteStudent(Student $student)
     {
         $student->delete();
+
+        Mail::to($student->email)->send(new StudentDeleted($student->name));
 
         return response(["message" => "$student->name deleted!"]);
     }
