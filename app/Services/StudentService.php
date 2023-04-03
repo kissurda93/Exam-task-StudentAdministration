@@ -74,8 +74,8 @@ class StudentService
   {
     $file = $photo;
     $imageName = time() . '-' . $name . "." . $file->extension();
-    $file->move(public_path('img'), $imageName);
-    $path = config('app.url') . '/img/' . $imageName;
+    $file->move(public_path("img/$imageName"));
+    $path = public_path("img/$imageName");
     return $path;
   }
 

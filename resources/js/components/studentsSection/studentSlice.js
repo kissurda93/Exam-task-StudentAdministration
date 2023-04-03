@@ -11,7 +11,7 @@ const initialState = {
   next_page: "",
   first_page: "",
   last_page: "",
-  target_link: "http://localhost:8000/students",
+  target_link: "/students",
   searchByNameState: "",
   status: "idle",
   error: null,
