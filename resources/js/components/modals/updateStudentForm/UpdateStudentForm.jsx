@@ -70,7 +70,7 @@ export default function UpdateStudentForm({ id, setModal }) {
       // The next line is a workaround for this problem.
       formData.append("_method", "PATCH");
 
-      const response = await axios.post(`updateStudent/${id}`, formData);
+      const response = await axios.post(`/updateStudent/${id}`, formData);
       if (response.status === 200) {
         dispatch(setMessage(response.data.message));
         dispatch(fetchStudents(targetLink));

@@ -13,7 +13,7 @@ export default function DeleteStudent({ name, id, setModal }) {
     if (confirm(`Do you want to delete ${name}?`)) {
       setLoading(true);
       try {
-        const response = await axios.delete(`deleteStudent/${id}`);
+        const response = await axios.delete(`/deleteStudent/${id}`);
         if (response.status === 200) {
           dispatch(setMessage(response.data.message));
           dispatch(fetchStudents(target_link));

@@ -38,7 +38,7 @@ class StudentController extends Controller
         if(isset($validated['photo'])) {
             $validated['photo'] = $studentService->savePhoto($validated['photo'], $validated['name']);
         } else {
-            $validated['photo'] = public_path('img/useravatar.png') . '/img/' . 'useravatar.png';
+            $validated['photo'] = 'img/useravatar.png';
         }
 
         $student = Student::create($validated);

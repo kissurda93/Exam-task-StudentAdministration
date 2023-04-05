@@ -66,7 +66,7 @@ export default function NewStudentForm({ setModal }) {
         formData.append("study_groups", groupsString);
       }
 
-      const response = await axios.post("newStudent", formData);
+      const response = await axios.post("/newStudent", formData);
       if (response.status === 200) {
         setModal(false);
         dispatch(setMessage(response.data.message));
